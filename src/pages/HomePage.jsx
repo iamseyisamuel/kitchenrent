@@ -29,7 +29,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="relative w-full min-h-[500px] md:min-h-screen flex items-center justify-center overflow-hidden mb-8">
+      <section className="relative w-full min-h-[600px] flex items-center justify-center overflow-hidden mb-8">
         <img
           src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80"
           alt="Kitchen background"
