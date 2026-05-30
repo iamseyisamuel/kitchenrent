@@ -39,7 +39,7 @@ export default function HomePage() {
           marginLeft: '-50vw',
           marginRight: '-50vw',
           minHeight: '500px',
-          backgroundImage: 'url(/src/assets/Kitchen.png)',
+          backgroundImage: "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
