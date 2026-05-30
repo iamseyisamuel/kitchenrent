@@ -174,17 +174,68 @@ export default function ProfilePage() {
     navigate('/login')
   }
 
-  function showToast(message, type = 'success') {
-    setToastType(type)
-    setToast(message)
+  function saveToLocalStorage(key, value) {
+    try {
+      localStorage.setItem(key, value)
+      return true
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014) {
+        alert('Storage full. Please clear some browser data and try again.')
+      } else {
+        console.error('Storage error:', e)
+      }
+      return false
+    }
   }
 
-  const handleProfileSave = (e) => {
+  const handleProfilePicUpload = (e) => {
+    try {
+      const file = e.target.files?.[0]
+      if (!file) return
+
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Image too large. Please use an image under 2MB.')
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        try {
+          const base64 = reader.result
+          if (!base64) {
+            alert('Could not save image. Please try a smaller image.')
+            return
+          }
+
+          if (!saveToLocalStorage('kitchenrent_profile_pic', base64)) return
+
+          const user = JSON.parse(localStorage.getItem('kitchenrent_user') || '{}')
+          const updatedUser = { ...user, profilePic: base64 }
+          saveToLocalStorage('kitchenrent_user', JSON.stringify(updatedUser))
+
+          setProfile((prev) => ({ ...prev, avatar: base64 }))
+          setAuth((prev) => ({ ...prev, profilePic: base64 }))
+          window.dispatchEvent(new Event('profileUpdated'))
+        } catch (err) {
+          console.error('Error saving profile pic:', err)
+          alert('Could not save image. Please try a smaller image.')
+        }
+      }
+      reader.onerror = () => {
+        alert('Could not read image file. Please try again.')
+      }
+      reader.readAsDataURL(file)
+    } catch (err) {
+      console.error('Upload error:', err)
+    }
+  }
+
+  function handleProfileSave(e) {
     e.preventDefault()
     const userData = { name: profile.name, email: profile.email, phone: profile.phone }
-    localStorage.setItem('kitchenrent_user', JSON.stringify(userData))
+    saveToLocalStorage('kitchenrent_user', JSON.stringify(userData))
     if (profile.avatar) {
-      localStorage.setItem('kitchenrent_profile_pic', profile.avatar)
+      saveToLocalStorage('kitchenrent_profile_pic', profile.avatar)
     }
     setAuth((prev) => ({ ...prev, name: profile.name, email: profile.email, profilePic: profile.avatar }))
 
@@ -526,18 +577,7 @@ export default function ProfilePage() {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (!file) return
-                      const reader = new FileReader()
-                      reader.onload = () => {
-                        const dataUrl = reader.result
-                        setProfile((prev) => ({ ...prev, avatar: dataUrl }))
-                        localStorage.setItem('kitchenrent_profile_pic', dataUrl)
-                        setAuth((prev) => ({ ...prev, profilePic: dataUrl }))
-                      }
-                      reader.readAsDataURL(file)
-                    }}
+                    onChange={handleProfilePicUpload}
                     className="mt-2 w-full rounded border p-3"
                   />
                 </div>

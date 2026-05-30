@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { ShoppingCart, User, Menu, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
@@ -13,10 +13,21 @@ function scrollToHow() {
 export default function Navbar() {
   const { cart, auth } = useCart()
   const [open, setOpen] = useState(false)
+  const [profilePic, setProfilePic] = useState(auth?.profilePic || localStorage.getItem('kitchenrent_profile_pic') || '')
   const navigate = useNavigate()
   const location = useLocation()
 
-  const profilePic = auth?.profilePic || localStorage.getItem('kitchenrent_profile_pic')
+  useEffect(() => {
+    setProfilePic(auth?.profilePic || localStorage.getItem('kitchenrent_profile_pic') || '')
+  }, [auth?.profilePic])
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setProfilePic(localStorage.getItem('kitchenrent_profile_pic') || auth?.profilePic || '')
+    }
+    window.addEventListener('profileUpdated', handleProfileUpdate)
+    return () => window.removeEventListener('profileUpdated', handleProfileUpdate)
+  }, [auth?.profilePic])
 
   const handleHowItWorks = () => {
     if (location.pathname === '/') {
