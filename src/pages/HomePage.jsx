@@ -29,24 +29,14 @@ export default function HomePage() {
 
   return (
     <div>
-      <section 
-        className="relative flex items-center justify-center mb-8"
-        style={{
-          position: 'relative',
-          width: '100vw',
-          left: '50%',
-          right: '50%',
-          marginLeft: '-50vw',
-          marginRight: '-50vw',
-          minHeight: '500px',
-          backgroundImage: "url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-40" />
-        <div className="relative text-center text-white px-4 max-w-2xl">
+      <section className="relative w-full min-h-[500px] md:min-h-screen flex items-center justify-center overflow-hidden mb-8">
+        <img
+          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80"
+          alt="Kitchen background"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        <div className="relative z-10 text-center text-white px-4 max-w-2xl">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-2 md:mb-4 leading-tight">Equip Your Kitchen with the Best</h1>
           <p className="text-base md:text-lg lg:text-xl mb-6 md:mb-8">Flexible rentals for events, pop-ups and catering.</p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
