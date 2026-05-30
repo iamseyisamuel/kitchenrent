@@ -55,15 +55,44 @@ export default function RegisterPage() {
 
     if (!isFormValid) return
 
-    const userData = { name, email, phone, idType, idNumber, password, accountType: type, createdAt: new Date().toISOString(), isVerified: true }
+    const normalizedEmail = email.toLowerCase().trim()
+    const joinDate = new Date().toISOString()
+    const userData = {
+      name,
+      email: normalizedEmail,
+      phone,
+      idType,
+      idNumber,
+      password,
+      accountType: type,
+      createdAt: joinDate,
+      isVerified: true
+    }
+    console.log('Saving user:', { email: normalizedEmail, name })
+    console.log('All users in storage:', localStorage.getItem('kitchenrent_users'))
+
     localStorage.setItem('kitchenrent_user', JSON.stringify(userData))
-    // append to global users list
     try {
       const existing = JSON.parse(localStorage.getItem('kitchenrent_users') || '[]')
-      existing.push({ name, email, phone, idType, idNumber, password, joinDate: userData.createdAt, totalOrders: 0, totalSpent: 0, avatar: null, accountType: type, isVerified: true })
+      existing.push({
+        name,
+        email: normalizedEmail,
+        phone,
+        idType,
+        idNumber,
+        password,
+        joinDate,
+        totalOrders: 0,
+        totalSpent: 0,
+        avatar: null,
+        accountType: type,
+        isVerified: true
+      })
       localStorage.setItem('kitchenrent_users', JSON.stringify(existing))
-    } catch (e) { console.error(e) }
-    setAuth({ loggedIn: true, email, name, profilePic: null, isAdmin: false })
+    } catch (e) {
+      console.error(e)
+    }
+    setAuth({ loggedIn: true, email: normalizedEmail, name, profilePic: null, isAdmin: false })
     navigate('/profile')
   }
 

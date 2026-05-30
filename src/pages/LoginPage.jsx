@@ -19,6 +19,10 @@ export default function LoginPage() {
       return
     }
 
+    console.log('Attempting login with:', email)
+    console.log('Users in storage:', localStorage.getItem('kitchenrent_users'))
+    console.log('Single user in storage:', localStorage.getItem('kitchenrent_user'))
+
     if (email === 'admin@kitchenrent.com' && password === 'ict2112026project') {
       const adminUser = { name: 'Admin', email: 'admin@kitchenrent.com', isAdmin: true }
       localStorage.setItem('kitchenrent_user', JSON.stringify(adminUser))
@@ -28,21 +32,25 @@ export default function LoginPage() {
       return
     }
 
-    const user = JSON.parse(localStorage.getItem('kitchenrent_user') || 'null')
-    const storedPassword = localStorage.getItem('kitchenrent_password') || ''
+    const users = JSON.parse(localStorage.getItem('kitchenrent_users') || '[]')
+    const normalizedEmail = email.toLowerCase().trim()
+    const foundUser = users.find((u) => u.email?.toLowerCase().trim() === normalizedEmail && u.password === password)
 
-    if (!user || user.email !== email || password !== storedPassword) {
+    if (!foundUser) {
       setError('Invalid email or password')
       return
     }
 
-    setAuth({
-      loggedIn: true,
-      email: user.email,
-      name: user.name,
-      profilePic: localStorage.getItem('kitchenrent_profile_pic') || null,
-      isAdmin: user.isAdmin || false
-    })
+    const loggedInUser = {
+      name: foundUser.name,
+      email: foundUser.email,
+      phone: foundUser.phone,
+      accountType: foundUser.accountType,
+      isAdmin: false
+    }
+    localStorage.setItem('kitchenrent_user', JSON.stringify(loggedInUser))
+    localStorage.setItem('kitchenrent_auth', JSON.stringify({ loggedIn: true, email: loggedInUser.email, name: loggedInUser.name, profilePic: null, isAdmin: false }))
+    setAuth({ loggedIn: true, email: loggedInUser.email, name: loggedInUser.name, profilePic: null, isAdmin: false })
     navigate('/')
   }
 
