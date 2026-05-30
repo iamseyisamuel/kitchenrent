@@ -6,6 +6,7 @@ import ImageWithFallback from '../components/ImageWithFallback'
 import { useCart } from '../context/CartContext'
 import { Check, ChevronLeft, ShoppingCart } from 'lucide-react'
 import { equipmentImages } from '../assets/images'
+import equipmentData from '../data/equipment.json'
 
 export default function EquipmentDetailPage(){
   const { id } = useParams()
@@ -19,10 +20,10 @@ export default function EquipmentDetailPage(){
   const navigate = useNavigate()
 
   useEffect(()=>{
-    fetch('/src/data/equipment.json').then(r=>r.json()).then(data=>{
-      const found = data.find(d => String(d.id) === String(id))
-      setItem(found)
-    }).finally(()=>setLoading(false))
+    const found = equipmentData.find((d) => String(d.id) === String(id))
+    setItem(found)
+    console.log('Equipment detail loaded:', id, found ? true : false)
+    setLoading(false)
   },[id])
 
   const days = useMemo(()=>{

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import EquipmentCard from '../components/EquipmentCard'
 import { ChevronLeft, Grid, Utensils, Cake, Zap, Factory, Thermometer } from 'lucide-react'
+import equipmentData from '../data/equipment.json'
 
 const categories = [
   { key: 'All', label: 'All Equipment', icon: Grid },
@@ -23,10 +24,9 @@ export default function EquipmentPage() {
 
   useEffect(() => {
     setLoading(true)
-    fetch('/src/data/equipment.json')
-      .then((r) => r.json())
-      .then((data) => setItems(data))
-      .finally(() => setLoading(false))
+    setItems(equipmentData)
+    console.log('Equipment data:', equipmentData?.length)
+    setLoading(false)
   }, [])
 
   const toggleType = (t) => {

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import EquipmentCard from '../components/EquipmentCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { ShoppingBag, Truck, RotateCcw } from 'lucide-react'
+import equipmentData from '../data/equipment.json'
 
 export default function HomePage() {
   const [featured, setFeatured] = useState([])
@@ -12,10 +13,9 @@ export default function HomePage() {
 
   useEffect(() => {
     setLoading(true)
-    fetch('/src/data/equipment.json')
-      .then((r) => r.json())
-      .then((data) => setFeatured(data.slice(0, 4)))
-      .finally(() => setLoading(false))
+    setFeatured(equipmentData.slice(0, 4))
+    console.log('Featured equipment loaded:', equipmentData.length)
+    setLoading(false)
   }, [])
 
   useEffect(() => {

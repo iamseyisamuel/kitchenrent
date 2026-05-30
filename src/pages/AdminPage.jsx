@@ -3,6 +3,7 @@ import { LayoutDashboard, ShoppingBag, Package, Users, Wrench, Settings, Bell, S
 import { Bar } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js'
 import equipmentData from '../data/equipment.json'
+import { equipmentImages } from '../assets/images'
 import ImageWithFallback from '../components/ImageWithFallback'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip)
@@ -760,7 +761,7 @@ function AdminPageContent() {
                   {filteredEquipment.map((item) => (
                     <tr key={item.id} className="border-b last:border-b-0">
                       <td className="px-4 py-4">
-                        <ImageWithFallback src={item.image || '/src/assets/mixing-bowl-set.jpg'} alt={item.name} className="h-16 w-20 rounded-lg object-cover" />
+                        <ImageWithFallback src={equipmentImages[item.id] || item.image || '/src/assets/mixing-bowl-set.jpg'} alt={item.name} className="h-16 w-20 rounded-lg object-cover" />
                       </td>
                       <td className="px-4 py-4">
                         <div className="font-medium">{item.name}</div>
@@ -986,7 +987,7 @@ function AdminPageContent() {
                       const itemTotal = (item.price || 0) * itemQuantity * itemDays
                       return (
                         <div key={idx} className="flex items-center gap-3">
-                          <img src={item.image || '/src/assets/mixing-bowl-set.jpg'} alt={item.name} className="h-14 w-20 rounded-lg object-cover" />
+                          <img src={equipmentImages[item.id] || item.image || '/src/assets/mixing-bowl-set.jpg'} alt={item.name} className="h-14 w-20 rounded-lg object-cover" />
                           <div>
                             <div className="font-medium">{item.name}</div>
                             <div className="text-xs text-slate-500">{itemQuantity} units × {itemDays} days</div>
